@@ -3,8 +3,8 @@
 <head>
 	<title>404 Not Found</title>
 	<meta charset="UTF-8">
-  <meta name="description" content="Robot 404 Page">
-  <meta name="keywords" content="HTML,CSS,404,Not found">
+  <meta name="description" content="404 Page">
+  <meta name="keywords" content="HTML,CSS,404,Not found,error,error page">
   <meta name="author" content="Rishni Meemeduma">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
