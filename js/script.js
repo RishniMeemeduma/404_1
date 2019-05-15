@@ -1,174 +1,98 @@
-class App {
-  
-  constructor() {
-    
-    this.randFrom = [
-      'first',
-      'last',
-      'center'
-    ];
-    
-    this.easing = [
-      'linear',
-      'easeInOutQuad',
-      'easeInOutCubic',
-      'easeInOutQuart',
-      'easeInOutQuint',
-      'easeInOutSine',
-      'easeInOutExpo',
-      'easeInOutCirc',
-      'easeInOutBack',
-      'cubicBezier(.5, .05, .1, .3)',
-      'spring(1, 80, 10, 0)',
-      'steps(10)'
-    ];
-    
-    this.randFromText = document.getElementById('randFrom');
-    this.randEasingText = document.getElementById('randEasing'); 
-  }
+var timeline = anime.timeline({ autoplay: true, direction: 'alternate', loop: true });
 
-  init() {
-
-      this.camera = new THREE.PerspectiveCamera( 25, window.innerWidth / window.innerHeight, 0.1, 1000 );
-      this.camera.position.x = -45;
-      this.camera.position.y = 20;
-      this.camera.position.z = -45;
-    
-      this.controls = new THREE.OrbitControls(this.camera);
-      this.controls.target = new THREE.Vector3(5,-5,5);
-
-      this.scene = new THREE.Scene();
-    
-      this.resizeListener = e => this.onResize(e);
-	    window.addEventListener( 'resize', this.resizeListener, false );
-    
-      this.createBoxes();
-
-      this.renderer = new THREE.WebGLRenderer({
-        antialias: true
-      });
-
-      this.renderer.setPixelRatio(window.devicePixelRatio);
-      this.renderer.setSize( window.innerWidth, window.innerHeight );
-
-      document.body.appendChild( this.renderer.domElement );
-    
-      this.beginAnimationLoop();
-
-      this.animate();
+function setDash(el) {
+  if (el.nodeName === 'path') {
+    el.style.dashArray = anime.setDashoffset(el);
+    return [anime.setDashoffset(el) - 1, 0];
   }
   
-  createBoxes() {
-    this.geometry = new THREE.BoxBufferGeometry(1, 10, 1);
-    
-    let vertexShader = `
-      varying vec2 vUv;
-      void main()	{
-        vUv = uv;
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-      }
-    `;
-    
-    let fragmentShader = `
-      #extension GL_OES_standard_derivatives : enable
-
-      varying vec2 vUv;
-      uniform float thickness;
-
-      float edgeFactor(vec2 p){
-        vec2 grid = abs(fract(p - 0.5) - 0.5) / fwidth(p) / thickness;
-        return min(grid.x, grid.y);
-      }
-
-      void main() {
-
-        float a = edgeFactor(vUv);
-
-        vec3 c = mix(vec3(1), vec3(0), a);
-
-        gl_FragColor = vec4(c, 1.0);
-      }
-    `;
-    
-    let material = new THREE.ShaderMaterial({
-      uniforms: {
-        thickness: {
-          value: 1.5
-        }
-      },
-      vertexShader,
-      fragmentShader
-    });
-    
-    let cube = new THREE.Mesh( this.geometry, material );      
-    
-    let offset = 1.25;
-    this.nRows = 25;
-    this.nCols = 25;
-    this.staggerArray = [];
-    
-    for(var column = 0; column < this.nCols; column++) {
-      for(var row = 0; row < this.nRows; row++) {
-        let obj = cube.clone();
-        obj.position.x = (row * offset) - ((this.nRows*0.5) + (this.geometry.parameters.width*0.5));
-        obj.position.y = -(this.geometry.parameters.height*0.5);
-        obj.position.z = (column * offset) - ((this.nCols*0.5) + (this.geometry.parameters.width*0.5));
-        this.staggerArray.push(obj.position);
-        this.scene.add(obj);
-      }
-    }
-  }
-  
-  beginAnimationLoop() {
-     
-    // random from array
-    let randFrom = this.randFrom[Math.floor(Math.random()*this.randFrom.length)];
-    let easingString = this.easing[Math.floor(Math.random()*this.easing.length)];
-    
-    this.randFromText.textContent = randFrom;
-    this.randEasingText.textContent = easingString;
-    
-    anime({
-      targets: this.staggerArray,
-      y: [
-        {value: (this.geometry.parameters.height*0.25), duration: 500},
-        {value: -(this.geometry.parameters.height*0.25), duration: 2000},
-      ],
-      delay: anime.stagger(200, {grid: [this.nRows, this.nCols], from: randFrom}),
-      easing: easingString,
-      complete: (anim) => this.beginAnimationLoop()
-    });
-    
-  }
-
-  animate() {
-
-      requestAnimationFrame( () => this.animate() );
-      this.update();
-      this.render();
-  }
-
-  update() {
-     
-    // update orbit controls
-    if(this.controls) {
-      this.controls.update();
-    }
-  }
-
-  render() {
-    this.renderer.render( this.scene, this.camera );
-  }
-  
-  onResize() {
-
-    // scene & camera update
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize( window.innerWidth, window.innerHeight );
-  }
-  
+  return 0;
 }
 
-let app = new App();
-app.init();
+var animations = [
+  { name: '.t1', x: 195.47816, y: 152.84847, stroke: '#dd5d20' },
+  { name: '.t2', x: 254.09133, y: 152.65768, stroke: '#0b9444' },
+  { name: '.h1', x: 387.71374, y: 152.65768, stroke: '#1f91ac' },
+  { name: '.h2', x: 383.47816, y: 210.44844, stroke: '#df871b' },
+  { name: '.h3', x: 510.41374, y: 152.65768, stroke: '#1f91ac' },
+  { name: '.h4', x: 507, y: 152.36218, fill: '#df871b' },
+  { name: '.i1', x: 192.47816, y: 348.64847, stroke: '#dd5d20' },
+  { name: '.i2', x: 188.47816, y: 463.85818, stroke: '#dd5d20' },
+  { name: '.i3', x: 258.09133, y: 348.56614, stroke: '#1f91ac' },
+  { name: '.i4', x: 254, y: 348.36218, fill: '#ffffff' },
+  { name: '.n1', x: 387.71374, y: 348.36614, stroke: '#da3931' },
+  { name: '.n2', x: 499.004, y: 348.36614, stroke: '#da3931' },
+  { name: '.n3', x: 395.7, y: 348.46218, stroke: '#0b9444' },
+  { name: '.n4', x: 391.70001, y: 348.66217, fill: '#da3931' },
+  { name: '.n5', x: 503, y: 463.16217, fill: '#da3931' },
+  { name: '.k1', x: 188.32637, y: 544.48746, stroke: '#da3931' },
+  { name: '.k2', x: 200.31263, y: 659.5965, stroke: '#1f91ac' },
+  { name: '.k3', x: 196.31264, y: 659.39655, fill: '#da3931' },
+  { name: '.k4', x: 252.924, y: 599.49118, stroke: '#df871b' }
+];
+
+animations.forEach(function(animation, index) {
+  if (animation.stroke) {
+    timeline
+    .add({
+      targets: animation.name,
+      stroke: {
+        value: ['#000', animation.stroke],
+        duration: 500,
+        delay: 1000 + index * 30,
+        easing: 'easeInOutQuad'
+      },
+      offset: 0
+    });
+  }
+  if (animation.fill) {
+    timeline
+    .add({
+      targets: animation.name,
+      fill: {
+        value: ['#000', animation.fill],
+        duration: 500,
+        delay: 1000 + index * 30,
+        easing: 'easeInOutQuad'
+      },
+      offset: 0
+    });
+  }
+  timeline
+  .add({
+    targets: animation.name,
+    translateX: {
+      value: [100 * (index % 4) - animation.x + 100, -100],
+      duration: 500,
+      delay: 1000 + index * 30,
+      easing: 'easeInOutQuad'
+    },
+    translateY: {
+      value: [100 * Math.floor(index / 4) - animation.y + 100, -100],
+      duration: 500,
+      delay: 1000 + index * 30,
+      easing: 'easeInOutQuad'
+    },
+    offset: 0
+  });
+  timeline
+  .add({
+    targets: animation.name,
+    strokeDashoffset: {
+      value: setDash,
+      duration: 800,
+      delay: 1200 + index * 30,
+      easing: 'easeInOutQuad'
+    },
+    offset: 0
+  });
+});
+
+timeline
+.add({
+  targets: '.t1',
+  opacity: 1,
+  duration: 1000,
+  delay: 4000,
+  offset: 0
+});
