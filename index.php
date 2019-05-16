@@ -30,12 +30,12 @@
 	  	<p>Your page is not found. Return to <a href="index.html">Home Page</a></p>
 	  </div>
 
-
-</body>
-
-  <!-- Include js -->
+	<!-- Include js -->
    	<script src="js/anime.min.js"></script>
  	<script src="js/script.js"></script>
-  <!-- End including js -->
+  	<!-- End including js -->
+</body>
+
+  
 
 </html>
