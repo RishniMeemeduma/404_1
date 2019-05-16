@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 	<title>404 Not Found</title>
 	<meta charset="UTF-8">
@@ -35,7 +35,7 @@
 
   <!-- Include js -->
    	<script src="js/anime.min.js"></script>
- 	<script type="text/javascript" src="js/script.js"></script>
+ 	<script src="js/script.js"></script>
   <!-- End including js -->
 
 </html>
